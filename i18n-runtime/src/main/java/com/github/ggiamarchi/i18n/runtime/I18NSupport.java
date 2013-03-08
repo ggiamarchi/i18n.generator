@@ -6,10 +6,6 @@ import java.util.ResourceBundle;
 
 public abstract class I18NSupport {
 
-	public interface LocaleProvider {
-		Locale get();
-	}
-	
 	private LocaleProvider localeProvider;
 	
 	public void setLocaleProvider(LocaleProvider localeProvider) {
