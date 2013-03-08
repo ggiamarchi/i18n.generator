@@ -1,105 +1,51 @@
 package com.github.ggiamarchi.i18n.test;
 
-import static org.junit.Assert.*;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
-import com.github.ggiamarchi.i18n.Launcher;
+import com.github.ggiamarchi.i18n.Generator;
 import com.github.ggiamarchi.i18n.Launcher.Method;
 
 public class GeneratorTest {
 
+	/*
+	 * Test that generation engine ends without error but does not check the correctness
+	 * of the generated output
+	 */
 	@Test
-	public void normalizeFolderPathTest() {
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("/path/to/directory"));
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("/path/to/directory/"));
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("///path/to//directory"));
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("/path///to/directory//"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:\\path\\to\\directory"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:\\path\\to\\directory\\"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:\\\\path\\/\\to\\//directory/\\"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:/\\path\\/to\\directory"));
+	public void generateInterfaceTest() {
+		Generator generator = new Generator();
+		generator.generate(buildModel(), "i18n-java-interface.ftl", new StringWriter());		
 	}
 	
+	/*
+	 * Test that generation engine ends without error but does not check the correctness
+	 * of the generated output
+	 */
 	@Test
-	public void methodInnerClassTestOk() {
-
-		Method m;
+	public void generateClassTest() {
+		Generator generator = new Generator();
+		generator.generate(buildModel(), "i18n-java-class.ftl", new StringWriter());
+	}
+	
+	private Map<String, Object> buildModel() {
 		
-		m = new Method("a", "b");
-		assertEquals("a", m.getProperty());
-		assertEquals("b", m.getName());
-		assertArrayEquals(new String [] {}, m.getParameters());
+		Method [] methods = new Method[2];
+		methods[0] = new Method("hello.world", "hello_world");
+		methods[1] = new Method("hello.single", "hello_single", new String [] { "arg0", "arg1" });
 		
-		m = new Method("a", "b", "c");
-		assertEquals("a", m.getProperty());
-		assertEquals("b", m.getName());
-		assertArrayEquals(new String [] { "c" }, m.getParameters());
-
-		m = new Method("a", "b", "c", "d");
-		assertEquals("a", m.getProperty());
-		assertEquals("b", m.getName());
-		assertArrayEquals(new String [] { "c", "d" }, m.getParameters());
+		Map<String, Object> model = new HashMap<String, Object>();		
+		model.put("packageName", "pac.ka.ge");
+		model.put("interfaceName", "I18N");
+		model.put("methods", methods);       	
+		model.put("className", "I18NImpl");
+		model.put("bundleName", "com.github.ggiamarchi.i18n.test.I18N");
 		
-	}
-
-	@Test
-	public void methodInnerClassTestPropertyNull() {
-		try {
-			new Method(null, "b");
-		}
-		catch (IllegalArgumentException e) {
-			return;
-		}
-		fail("Method contructor with null value for property 'property' should raise an exception");
-	}
-
-	@Test
-	public void methodInnerClassTestPropertyEmpty() {
-		try {
-			new Method("", "b");
-		}
-		catch (IllegalArgumentException e) {
-			return;
-		}
-		fail("Method contructor with empty value for property 'property' should raise an exception");
-	}
-
-	@Test
-	public void methodInnerClassTestNameNull() {
-		try {
-			new Method("a", null);
-		}
-		catch (IllegalArgumentException e) {
-			return;
-		}
-		fail("Method contructor with null value for property 'name' should raise an exception");
-	}
-
-	@Test
-	public void methodInnerClassTestNameEmpty() {
-		try {
-			new Method("a", "");
-		}
-		catch (IllegalArgumentException e) {
-			return;
-		}
-		fail("Method contructor with empty value for property 'name' should raise an exception");
-	}
-
-	@Test
-	public void methodInnerClassTestEquals() {
-		assertTrue(new Method("a", "b").equals(new Method("a", "b")));
-		assertTrue(new Method("a", "b", "c").equals(new Method("a", "b", "c")));
-		assertTrue(new Method("a", "b", "c", "d").equals(new Method("a", "b", "c", "d")));
-		assertFalse(new Method("a", "b").equals(new Method("a", "b", "c")));		
-	}
-
-	@Test
-	public void methodInnerClassTestHashcode() {
-		assertEquals(new Method("a", "b").hashCode(), new Method("a", "b").hashCode());
-		assertEquals(new Method("a", "b", "c").hashCode(), new Method("a", "b", "c").hashCode());
-		assertEquals(new Method("a", "b", "c", "d").hashCode(), new Method("a", "b", "c", "d").hashCode());
-		assertNotEquals(new Method("a", "b").hashCode(), new Method("a", "b", "c").hashCode());		
+		return model;
+		
 	}
 	
 }
