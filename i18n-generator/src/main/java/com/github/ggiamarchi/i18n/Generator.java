@@ -26,10 +26,7 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-/**
- * 
- * @author G. Giamarchi
- */
+
 public class Generator {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Generator.class);
@@ -58,84 +55,94 @@ public class Generator {
 			String [] resourcesDirectories,
 			String outputDirectory) {
 
+		String normalizedSrcDirectory = normalizeFolderPath(srcDirectory);
+		String normalizedOutputDirectory = normalizeFolderPath(outputDirectory);
+		String [] normalizedResourcesDirectories = new String[resourcesDirectories.length];
+
         LOG.info("");
         LOG.info("I18N bundle configuration :");
         LOG.info("  Bundles   => {}", bundles);
-        LOG.info("  Output    => {}", outputDirectory);
-        LOG.info("  Sources   => {}", srcDirectory);
-        for (String res : resourcesDirectories) {
-        	LOG.info("  Resources => {}", res);
+        LOG.info("  Output    => {}", normalizedOutputDirectory);
+        LOG.info("  Sources   => {}", normalizedSrcDirectory);
+
+        for (int i = 0 ; i < resourcesDirectories.length ; i++) {
+        	normalizedResourcesDirectories[i] = normalizeFolderPath(resourcesDirectories[i]);
+        	LOG.info("  Resources => {}", normalizedResourcesDirectories[i]);
         }
 
         for (String bundleName : bundles) {
 
-        	// TODO file path implementation
-        	
-        	String dir = resourcesDirectories[0] + "/";
         	int i = bundleName.lastIndexOf('.');
         	String packageName = bundleName.substring(0, i);
-        	dir += packageName.replace('.', '/');
-        	String bundleSimpleName = bundleName.substring(i+1);
-        	String className = bundleSimpleName.substring(0, 1).toUpperCase() + bundleSimpleName.substring(1);
-        	String outputClassFileName = outputDirectory + "/" + bundleName.substring(0, i).replace('.', '/') + "/" + className + "Impl.java";
-        	String outputInterfaceFileName = outputDirectory + "/" + bundleName.substring(0, i).replace('.', '/') + "/" + className + ".java";
-
-        	File directory = new File(dir);
+        	// TODO bundles are searched only in the first resource folder found. Implement search into all resource folders and src folder
+        	String bundleDirectoryName = normalizeFolderPath(normalizedResourcesDirectories[0] + packageName.replace('.', '/'));
         	
-        	if (!directory.isDirectory()) {
-        		// TODO failure
+        	String bundleSimpleName = bundleName.substring(i+1);
+        	String bundleSimpleNameFirstUpper = bundleSimpleName.substring(0, 1).toUpperCase() + bundleSimpleName.substring(1);
+
+        	String fullyQualifiedPackagePathName = normalizeFolderPath(bundleName.substring(0, i).replace('.', '/'));
+        	String outputClassFileName = normalizedOutputDirectory + fullyQualifiedPackagePathName + getImplementationName(bundleSimpleNameFirstUpper, true);
+        	String outputInterfaceFileName = normalizedOutputDirectory + fullyQualifiedPackagePathName + getInterfaceName(bundleSimpleNameFirstUpper, true);
+
+        	File bundleDirectory = new File(bundleDirectoryName);
+
+        	if (!bundleDirectory.isDirectory()) {
+        		throw new I18NGeneratorException("'" + bundleDirectoryName + "' is not a directory");
         	}
 
-    		String defaultBundleFile = null; 
+    		String defaultBundleFilePath = null; 
     		
-    		Pattern patternDefault = Pattern.compile(bundleSimpleName + ".properties");
-        	Pattern patternLangageOnly = Pattern.compile(bundleSimpleName + "_([a-z][a-z]).properties");
-        	Pattern patternLangageAndCountry = Pattern.compile(bundleSimpleName + "_([a-z][a-z])_([A-Z][A-Z]).properties");
+    		Pattern patternDefault = Pattern.compile(bundleSimpleName + "\\.properties");
+        	Pattern patternLangageOnly = Pattern.compile(bundleSimpleName + "_([a-z][a-z])\\.properties");
+        	Pattern patternLangageAndCountry = Pattern.compile(bundleSimpleName + "_([a-z][a-z])_([A-Z][A-Z])\\.properties");
+        	Pattern patternInvalidLocale = Pattern.compile(bundleSimpleName + "_.*\\.properties");
 
         	Map<Locale, String> localizedBundleFiles = new HashMap<Locale, String>();
         	
-        	for (String bundleFile : directory.list()) {
-        		Matcher m = patternDefault.matcher(bundleFile);
+        	for (String bundleFileName : bundleDirectory.list()) {
+        		Matcher m = patternDefault.matcher(bundleFileName);
         		if (m.find()) {
         			// This is the default bundle message file. Nothing to do.
-        			defaultBundleFile = bundleFile;
+        			defaultBundleFilePath = normalizeFolderPath(bundleDirectoryName + bundleFileName);
         			continue;
         		}
-        		m = patternLangageOnly.matcher(bundleFile);
+        		m = patternLangageOnly.matcher(bundleFileName);
         		if (m.find()) {
-        			localizedBundleFiles.put(new Locale(m.group(1)), bundleFile);
+        			localizedBundleFiles.put(new Locale(m.group(1)), bundleFileName);
         		}
         		else {
-        			m = patternLangageAndCountry.matcher(bundleFile);
+        			m = patternLangageAndCountry.matcher(bundleFileName);
             		if (m.find()) {
-            			localizedBundleFiles.put(new Locale(m.group(1), m.group(2)), bundleFile);
+            			localizedBundleFiles.put(new Locale(m.group(1), m.group(2)), bundleFileName);
             		}
             		else {
-            			// TODO or not todo ?
-            			// LOG.warn("bundle file name {} is not correct regarding the local format. This file will be ignored.", bundleFile);
+            			m = patternInvalidLocale.matcher(bundleFileName);
+            			if (m.find()) {
+            				LOG.warn("bundle file name {} is not correct regarding the local format. This file will be ignored.", bundleFileName);
+            			}
             		}
         		}
-        	}
-        	
-        	if (defaultBundleFile == null) {
-        		throw new IllegalStateException("default bundle file '" + bundleSimpleName + ".properties' cannot be found.");
         	}
         	
             LOG.info("");
         	LOG.info("Locales found => {}", localizedBundleFiles);
         	
+        	if (defaultBundleFilePath == null) {
+        		throw new IllegalStateException("default bundle file '" + bundleSimpleName + ".properties' cannot be found.");
+        	}
+
         	// Compute method list
         	
-        	List<Method> methods = computeMethodList(directory + "/" + defaultBundleFile); // TODO file path implementation
+        	List<Method> methods = computeMethodList(defaultBundleFilePath);
 
     		// Building model for generation
     		
     		Map<String, Object> model = new HashMap<String, Object>();
     		
     		model.put("packageName", packageName);
-    		model.put("interfaceName", className);
+    		model.put("interfaceName", getInterfaceName(bundleSimpleNameFirstUpper, false));
     		model.put("methods", methods);       	
-    		model.put("className", className + "Impl");
+    		model.put("className", getImplementationName(bundleSimpleNameFirstUpper, false));
     		model.put("bundleName", bundleName);
 
     		// Running interface code generation
@@ -148,6 +155,20 @@ public class Generator {
 
        }
 
+	}
+	
+	private String getImplementationName(String bundleSimpleNameFirstUpper, boolean extension) {
+		if (extension) {
+			return bundleSimpleNameFirstUpper + "Impl.java";
+		}
+		return bundleSimpleNameFirstUpper + "Impl";
+	}
+
+	private String getInterfaceName(String bundleSimpleNameFirstUpper, boolean extension) {
+		if (extension) {
+			return bundleSimpleNameFirstUpper + ".java";
+		}
+		return bundleSimpleNameFirstUpper;
 	}
 	
 
@@ -219,10 +240,18 @@ public class Generator {
 		}
 	}
 	
+	private static String normalizeFolderPath(String path) {
+		String s = path.replaceAll("(/|\\\\)+", "/");
+		if (!s.endsWith("/")) {
+			s += "/";
+		}
+		return s;
+	}
+	
 	/**
 	 * Class representing a method to be generated for a given message bundle property.
 	 */
-	public class Method {
+	public static class Method {
 
 		private String property;
 		private String name;
