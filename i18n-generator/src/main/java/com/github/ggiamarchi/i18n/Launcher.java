@@ -28,9 +28,9 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 
-public class Generator {
+public class Launcher {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Generator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
 
 	private static Configuration cfg;
 	
@@ -39,7 +39,7 @@ public class Generator {
 		 * Init freemarker generation engine
 		 */
 		cfg = new Configuration();
-		cfg.setClassForTemplateLoading(Generator.class, "/templates");
+		cfg.setClassForTemplateLoading(Launcher.class, "/templates");
 		cfg.setObjectWrapper(new DefaultObjectWrapper());
 	}
 
