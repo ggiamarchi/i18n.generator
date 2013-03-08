@@ -3,7 +3,6 @@ package com.github.ggiamarchi.i18n;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,26 +21,10 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
 
 public class Launcher {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
-
-	private static Configuration cfg;
-	
-	static {
-		/*
-		 * Init freemarker generation engine
-		 */
-		cfg = new Configuration();
-		cfg.setClassForTemplateLoading(Launcher.class, "/templates");
-		cfg.setObjectWrapper(new DefaultObjectWrapper());
-	}
 
 	/**
 	 * 
@@ -146,13 +129,12 @@ public class Launcher {
     		model.put("className", getImplementationName(bundleSimpleNameFirstUpper, false));
     		model.put("bundleName", bundleName);
 
-    		// Running interface code generation
+    		// Running code generation
     		
-    		generate(model, "i18n-java-interface.ftl", outputInterfaceFileName);
-
-    		// Running implementation class code generation
+    		Generator generator = new Generator();
     		
-    		generate(model, "i18n-java-class.ftl", outputClassFileName);
+    		generator.generate(model, "i18n-java-interface.ftl", outputInterfaceFileName);
+    		generator.generate(model, "i18n-java-class.ftl", outputClassFileName);
 
        }
 
@@ -216,30 +198,6 @@ public class Launcher {
 		return methods;
 	}
 
-	
-	/**
-	 * code source file generation.
-	 * 
-	 * @param model map containing data that will be used in the generation template
-	 * @param templateName freemarker template name
-	 * @param file file path for generation output
-	 */
-	private void generate(Map<String, Object> model, String templateName, String file) {
-		try {
-			File outFile = new File(file);
-			outFile.getParentFile().mkdirs();
-			FileWriter fw = new FileWriter(outFile);
-			Template template = cfg.getTemplate(templateName);
-			template.process(model, fw);
-			fw.close();
-		}
-		catch (IOException e) {
-			throw new I18NGeneratorException(e);
-		}
-		catch (TemplateException e) {
-			throw new I18NGeneratorException(e);
-		}
-	}
 	
 	/**
 	 * It normalize the input string according to the following rules :
