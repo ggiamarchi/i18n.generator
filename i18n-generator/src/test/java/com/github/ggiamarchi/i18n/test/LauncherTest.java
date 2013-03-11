@@ -3,21 +3,21 @@ package com.github.ggiamarchi.i18n.test;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import com.github.ggiamarchi.i18n.Launcher;
-import com.github.ggiamarchi.i18n.Launcher.Method;
+import com.github.ggiamarchi.i18n.GeneratorLauncher;
+import com.github.ggiamarchi.i18n.GeneratorLauncher.Method;
 
 public class LauncherTest {
 
 	@Test
 	public void normalizeFolderPathTest() {
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("/path/to/directory"));
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("/path/to/directory/"));
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("///path/to//directory"));
-		assertEquals("/path/to/directory/", Launcher.normalizeFolderPath("/path///to/directory//"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:\\path\\to\\directory"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:\\path\\to\\directory\\"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:\\\\path\\/\\to\\//directory/\\"));
-		assertEquals("C:/path/to/directory/", Launcher.normalizeFolderPath("C:/\\path\\/to\\directory"));
+		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("/path/to/directory"));
+		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("/path/to/directory/"));
+		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("///path/to//directory"));
+		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("/path///to/directory//"));
+		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:\\path\\to\\directory"));
+		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:\\path\\to\\directory\\"));
+		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:\\\\path\\/\\to\\//directory/\\"));
+		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:/\\path\\/to\\directory"));
 	}
 	
 	@Test

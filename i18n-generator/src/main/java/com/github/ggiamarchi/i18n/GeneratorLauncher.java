@@ -22,9 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class Launcher {
+public class GeneratorLauncher {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Launcher.class);
+	private static final Logger LOG = LoggerFactory.getLogger(GeneratorLauncher.class);
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class Launcher {
 	 * @param resourcesDirectories
 	 * @param outputDirectory
 	 */
-	public void run(
+	public void execute(
 			String [] bundles,
 			String srcDirectory,
 			String [] resourcesDirectories,
@@ -71,7 +71,7 @@ public class Launcher {
         	File bundleDirectory = new File(bundleDirectoryName);
 
         	if (!bundleDirectory.isDirectory()) {
-        		throw new I18NGeneratorException("'" + bundleDirectoryName + "' is not a directory");
+        		throw new GeneratorException("'" + bundleDirectoryName + "' is not a directory");
         	}
 
     		String defaultBundleFilePath = null; 
@@ -163,10 +163,10 @@ public class Launcher {
 			defaultBundle = new PropertyResourceBundle(new FileInputStream(new File(defaultBundleFile)));
 		}
 		catch (FileNotFoundException e) {
-			throw new I18NGeneratorException(e);
+			throw new GeneratorException(e);
 		}
 		catch (IOException e) {
-			throw new I18NGeneratorException(e);
+			throw new GeneratorException(e);
 		}
 
 		Set<String> orderedKeySet = new TreeSet<String>();

@@ -20,7 +20,7 @@ public class Generator {
 		 * Init freemarker generation engine
 		 */
 		cfg = new Configuration();
-		cfg.setClassForTemplateLoading(Launcher.class, "/templates");
+		cfg.setClassForTemplateLoading(GeneratorLauncher.class, "/templates");
 		cfg.setObjectWrapper(new DefaultObjectWrapper());
 	}
 
@@ -37,7 +37,7 @@ public class Generator {
 			generate(model, templateName, fw);
 		}
 		catch (IOException e) {
-			throw new I18NGeneratorException(e);
+			throw new GeneratorException(e);
 		}
 	}
 
@@ -55,10 +55,10 @@ public class Generator {
 			writer.close();
 		}
 		catch (IOException e) {
-			throw new I18NGeneratorException(e);
+			throw new GeneratorException(e);
 		}
 		catch (TemplateException e) {
-			throw new I18NGeneratorException(e);
+			throw new GeneratorException(e);
 		}
 	}
 

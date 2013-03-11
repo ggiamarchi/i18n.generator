@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.github.ggiamarchi.i18n.Generator;
-import com.github.ggiamarchi.i18n.Launcher.Method;
+import com.github.ggiamarchi.i18n.GeneratorLauncher.Method;
 
 public class GeneratorTest {
 
