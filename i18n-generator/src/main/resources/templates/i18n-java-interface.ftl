@@ -1,4 +1,4 @@
-package ${packageName};
+package ${interfacePackageName};
 
 /**
  * Messages for resource bundle ${bundleName}

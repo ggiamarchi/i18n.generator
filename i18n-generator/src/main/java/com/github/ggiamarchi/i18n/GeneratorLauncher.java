@@ -29,14 +29,15 @@ public class GeneratorLauncher {
 	/**
 	 * 
 	 * @param bundles
+	 * @param interfaceName 
+	 * @param className
 	 * @param srcDirectory
 	 * @param resourcesDirectories
 	 * @param outputDirectory
 	 */
 	public void execute(
-			String [] bundles,
-			String srcDirectory,
-			String [] resourcesDirectories,
+			String bundleName, String interfaceName, String className,
+			String srcDirectory, String [] resourcesDirectories,
 			String outputDirectory) {
 
 		String normalizedSrcDirectory = normalizeFolderPath(srcDirectory);
@@ -45,7 +46,7 @@ public class GeneratorLauncher {
 
         LOG.info("");
         LOG.info("I18N bundle configuration :");
-        LOG.info("  Bundles   => {}", bundles);
+        LOG.info("  Bundle    => {}", bundleName);
         LOG.info("  Output    => {}", normalizedOutputDirectory);
         LOG.info("  Sources   => {}", normalizedSrcDirectory);
 
@@ -54,106 +55,127 @@ public class GeneratorLauncher {
         	LOG.info("  Resources => {}", normalizedResourcesDirectories[i]);
         }
 
-        for (String bundleName : bundles) {
+    	int indexStartBundleSimpleName = bundleName.lastIndexOf('.');
+    	
+    	String bundlePackageName = bundleName.substring(0, indexStartBundleSimpleName);
+    	
+    	// TODO bundles are searched only in the first resource folder found. Implement search into all resource folders and src folder
+    	String bundleDirectoryName = normalizeFolderPath(normalizedResourcesDirectories[0] + bundlePackageName.replace('.', '/'));
+    	
+    	String bundleSimpleName = bundleName.substring(indexStartBundleSimpleName+1);
+    	String bundleSimpleNameFirstUpper = bundleSimpleName.substring(0, 1).toUpperCase() + bundleSimpleName.substring(1);
 
-        	int i = bundleName.lastIndexOf('.');
-        	String packageName = bundleName.substring(0, i);
-        	// TODO bundles are searched only in the first resource folder found. Implement search into all resource folders and src folder
-        	String bundleDirectoryName = normalizeFolderPath(normalizedResourcesDirectories[0] + packageName.replace('.', '/'));
-        	
-        	String bundleSimpleName = bundleName.substring(i+1);
-        	String bundleSimpleNameFirstUpper = bundleSimpleName.substring(0, 1).toUpperCase() + bundleSimpleName.substring(1);
+    	String defaultQualifiedPackagePathName = normalizeFolderPath(bundlePackageName.replace('.', '/'));
 
-        	String fullyQualifiedPackagePathName = normalizeFolderPath(bundleName.substring(0, i).replace('.', '/'));
-        	String outputClassFileName = normalizedOutputDirectory + fullyQualifiedPackagePathName + getImplementationName(bundleSimpleNameFirstUpper, true);
-        	String outputInterfaceFileName = normalizedOutputDirectory + fullyQualifiedPackagePathName + getInterfaceName(bundleSimpleNameFirstUpper, true);
 
-        	File bundleDirectory = new File(bundleDirectoryName);
+    	// Compute output file name for generated interface
+    	
+    	String interfacePackageName;
+    	String simpleInterfaceName;
+    	String outputInterfaceFileName;
+    	if (interfaceName == null) {
+    		interfacePackageName = bundlePackageName;
+    		simpleInterfaceName = bundleSimpleNameFirstUpper;
+    		outputInterfaceFileName = normalizedOutputDirectory + defaultQualifiedPackagePathName + simpleInterfaceName + ".java";
+    	}
+    	else {
+    		int i = interfaceName.lastIndexOf('.');
+    		interfacePackageName = interfaceName.substring(0, i);
+    		simpleInterfaceName = interfaceName.substring(i+1);
+    		String qualifiedPackagePathName = normalizeFolderPath(interfacePackageName.replace('.', '/'));
+    		outputInterfaceFileName = normalizedOutputDirectory + qualifiedPackagePathName + simpleInterfaceName + ".java";
+    	}
 
-        	if (!bundleDirectory.isDirectory()) {
-        		throw new GeneratorException("'" + bundleDirectoryName + "' is not a directory");
-        	}
+    	// Compute output file name for implementation class
 
-    		String defaultBundleFilePath = null; 
-    		
-    		Pattern patternDefault = Pattern.compile(bundleSimpleName + "\\.properties");
-        	Pattern patternLangageOnly = Pattern.compile(bundleSimpleName + "_([a-z][a-z])\\.properties");
-        	Pattern patternLangageAndCountry = Pattern.compile(bundleSimpleName + "_([a-z][a-z])_([A-Z][A-Z])\\.properties");
-        	Pattern patternInvalidLocale = Pattern.compile(bundleSimpleName + "_.*\\.properties");
+    	String classPackageName;
+    	String simpleClassName;
+    	String outputClassFileName;
+    	if (className == null) {
+    		classPackageName = bundlePackageName;
+    		simpleClassName = bundleSimpleNameFirstUpper + "Impl";
+    		outputClassFileName = normalizedOutputDirectory + defaultQualifiedPackagePathName + simpleClassName + ".java";
+    	}
+    	else {
+    		int i = className.lastIndexOf('.');
+    		classPackageName = className.substring(0, i);
+    		simpleClassName = className.substring(i+1);
+    		String qualifiedPackagePathName = normalizeFolderPath(classPackageName.replace('.', '/'));
+    		outputClassFileName = normalizedOutputDirectory + qualifiedPackagePathName + simpleClassName + ".java";
+    	}
 
-        	Map<Locale, String> localizedBundleFiles = new HashMap<Locale, String>();
-        	
-        	for (String bundleFileName : bundleDirectory.list()) {
-        		Matcher m = patternDefault.matcher(bundleFileName);
+    	//
+    	
+    	File bundleDirectory = new File(bundleDirectoryName);
+
+    	if (!bundleDirectory.isDirectory()) {
+    		throw new GeneratorException("'" + bundleDirectoryName + "' is not a directory");
+    	}
+
+		String defaultBundleFilePath = null; 
+		
+		Pattern patternDefault = Pattern.compile(bundleSimpleName + "\\.properties");
+    	Pattern patternLangageOnly = Pattern.compile(bundleSimpleName + "_([a-z][a-z])\\.properties");
+    	Pattern patternLangageAndCountry = Pattern.compile(bundleSimpleName + "_([a-z][a-z])_([A-Z][A-Z])\\.properties");
+    	Pattern patternInvalidLocale = Pattern.compile(bundleSimpleName + "_.*\\.properties");
+
+    	Map<Locale, String> localizedBundleFiles = new HashMap<Locale, String>();
+    	
+    	for (String bundleFileName : bundleDirectory.list()) {
+    		Matcher m = patternDefault.matcher(bundleFileName);
+    		if (m.find()) {
+    			// This is the default bundle message file. Nothing to do.
+    			defaultBundleFilePath = normalizeFolderPath(bundleDirectoryName + bundleFileName);
+    			continue;
+    		}
+    		m = patternLangageOnly.matcher(bundleFileName);
+    		if (m.find()) {
+    			localizedBundleFiles.put(new Locale(m.group(1)), bundleFileName);
+    		}
+    		else {
+    			m = patternLangageAndCountry.matcher(bundleFileName);
         		if (m.find()) {
-        			// This is the default bundle message file. Nothing to do.
-        			defaultBundleFilePath = normalizeFolderPath(bundleDirectoryName + bundleFileName);
-        			continue;
-        		}
-        		m = patternLangageOnly.matcher(bundleFileName);
-        		if (m.find()) {
-        			localizedBundleFiles.put(new Locale(m.group(1)), bundleFileName);
+        			localizedBundleFiles.put(new Locale(m.group(1), m.group(2)), bundleFileName);
         		}
         		else {
-        			m = patternLangageAndCountry.matcher(bundleFileName);
-            		if (m.find()) {
-            			localizedBundleFiles.put(new Locale(m.group(1), m.group(2)), bundleFileName);
-            		}
-            		else {
-            			m = patternInvalidLocale.matcher(bundleFileName);
-            			if (m.find()) {
-            				LOG.warn("bundle file name {} is not correct regarding the local format. This file will be ignored.", bundleFileName);
-            			}
-            		}
+        			m = patternInvalidLocale.matcher(bundleFileName);
+        			if (m.find()) {
+        				LOG.warn("bundle file name {} is not correct regarding the local format. This file will be ignored.", bundleFileName);
+        			}
         		}
-        	}
-        	
-            LOG.info("");
-        	LOG.info("Locales found => {}", localizedBundleFiles);
-        	
-        	if (defaultBundleFilePath == null) {
-        		throw new IllegalStateException("default bundle file '" + bundleSimpleName + ".properties' cannot be found.");
-        	}
+    		}
+    	}
+    	
+        LOG.info("");
+    	LOG.info("Locales found => {}", localizedBundleFiles);
+    	
+    	if (defaultBundleFilePath == null) {
+    		throw new IllegalStateException("default bundle file '" + bundleSimpleName + ".properties' cannot be found.");
+    	}
 
-        	// Compute method list
-        	
-        	List<Method> methods = computeMethodList(defaultBundleFilePath);
+    	// Compute method list
+    	
+    	List<Method> methods = computeMethodList(defaultBundleFilePath);
 
-    		// Building model for generation
-    		
-    		Map<String, Object> model = new HashMap<String, Object>();
-    		
-    		model.put("packageName", packageName);
-    		model.put("interfaceName", getInterfaceName(bundleSimpleNameFirstUpper, false));
-    		model.put("methods", methods);       	
-    		model.put("className", getImplementationName(bundleSimpleNameFirstUpper, false));
-    		model.put("bundleName", bundleName);
+		// Building model for generation
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		model.put("interfacePackageName", interfacePackageName);
+		model.put("classPackageName", classPackageName);
+		model.put("interfaceName", simpleInterfaceName);
+		model.put("className", simpleClassName);
+		model.put("methods", methods);
+		model.put("bundleName", bundleName);
 
-    		// Running code generation
-    		
-    		Generator generator = new Generator();
-    		
-    		generator.generate(model, "i18n-java-interface.ftl", outputInterfaceFileName);
-    		generator.generate(model, "i18n-java-class.ftl", outputClassFileName);
-
-       }
+		// Running code generation
+		
+		Generator generator = new Generator();
+		
+		generator.generate(model, "i18n-java-interface.ftl", outputInterfaceFileName);
+		generator.generate(model, "i18n-java-class.ftl", outputClassFileName);
 
 	}
-	
-	private String getImplementationName(String bundleSimpleNameFirstUpper, boolean extension) {
-		if (extension) {
-			return bundleSimpleNameFirstUpper + "Impl.java";
-		}
-		return bundleSimpleNameFirstUpper + "Impl";
-	}
-
-	private String getInterfaceName(String bundleSimpleNameFirstUpper, boolean extension) {
-		if (extension) {
-			return bundleSimpleNameFirstUpper + ".java";
-		}
-		return bundleSimpleNameFirstUpper;
-	}
-	
 
 	private List<Method> computeMethodList(String defaultBundleFile) {
 		List<Method> methods = new ArrayList<Method>();

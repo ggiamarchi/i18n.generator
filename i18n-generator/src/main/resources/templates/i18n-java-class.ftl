@@ -1,8 +1,12 @@
-package ${packageName};
+package ${classPackageName};
 
 import java.util.Locale;
 
 import com.github.ggiamarchi.i18n.runtime.I18NSupport;
+
+<#if classPackageName != interfacePackageName>
+import ${interfacePackageName}.${interfaceName};
+</#if>
 
 public class ${className} extends I18NSupport implements ${interfaceName} {
 

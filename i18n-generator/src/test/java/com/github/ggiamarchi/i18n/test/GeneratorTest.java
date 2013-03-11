@@ -37,8 +37,9 @@ public class GeneratorTest {
 		methods[0] = new Method("hello.world", "hello_world");
 		methods[1] = new Method("hello.single", "hello_single", new String [] { "arg0", "arg1" });
 		
-		Map<String, Object> model = new HashMap<String, Object>();		
-		model.put("packageName", "pac.ka.ge");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("interfacePackageName", "pac.ka.ge");
+		model.put("classPackageName", "pac.ka.ge");
 		model.put("interfaceName", "I18N");
 		model.put("methods", methods);       	
 		model.put("className", "I18NImpl");
