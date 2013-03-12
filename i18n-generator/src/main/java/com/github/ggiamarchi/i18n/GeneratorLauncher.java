@@ -57,15 +57,23 @@ public class GeneratorLauncher {
 
     	int indexStartBundleSimpleName = bundleName.lastIndexOf('.');
     	
-    	String bundlePackageName = bundleName.substring(0, indexStartBundleSimpleName);
-    	
-    	// TODO bundles are searched only in the first resource folder found. Implement search into all resource folders and src folder
-    	String bundleDirectoryName = normalizeFolderPath(normalizedResourcesDirectories[0] + bundlePackageName.replace('.', '/'));
-    	
-    	String bundleSimpleName = bundleName.substring(indexStartBundleSimpleName+1);
+    	String bundlePackageName;
+    	String bundleSimpleName;
+    	if (indexStartBundleSimpleName == -1) {
+    		bundlePackageName = "";
+    		bundleSimpleName = bundleName;
+    	}
+    	else {
+    		bundlePackageName = bundleName.substring(0, indexStartBundleSimpleName);
+    		bundleSimpleName = bundleName.substring(indexStartBundleSimpleName+1);
+    	}
+
     	String bundleSimpleNameFirstUpper = bundleSimpleName.substring(0, 1).toUpperCase() + bundleSimpleName.substring(1);
 
     	String defaultQualifiedPackagePathName = normalizeFolderPath(bundlePackageName.replace('.', '/'));
+
+    	// TODO bundles are searched only in the first resource folder found. Implement search into all resource folders and src folder
+    	String bundleDirectoryName = normalizeFolderPath(normalizedResourcesDirectories[0] + bundlePackageName.replace('.', '/'));
 
 
     	// Compute output file name for generated interface
@@ -80,8 +88,14 @@ public class GeneratorLauncher {
     	}
     	else {
     		int i = interfaceName.lastIndexOf('.');
-    		interfacePackageName = interfaceName.substring(0, i);
-    		simpleInterfaceName = interfaceName.substring(i+1);
+    		if (i == -1) {
+    			interfacePackageName = "";
+    			simpleInterfaceName = interfaceName;    			
+    		}
+    		else {
+    			interfacePackageName = interfaceName.substring(0, i);
+    			simpleInterfaceName = interfaceName.substring(i+1);    			
+    		}
     		String qualifiedPackagePathName = normalizeFolderPath(interfacePackageName.replace('.', '/'));
     		outputInterfaceFileName = normalizedOutputDirectory + qualifiedPackagePathName + simpleInterfaceName + ".java";
     	}
@@ -98,8 +112,14 @@ public class GeneratorLauncher {
     	}
     	else {
     		int i = className.lastIndexOf('.');
-    		classPackageName = className.substring(0, i);
-    		simpleClassName = className.substring(i+1);
+    		if (i == -1) {
+    			classPackageName = "";
+    			simpleClassName = className;    			
+    		}
+    		else {
+    			classPackageName = className.substring(0, i);
+    			simpleClassName = className.substring(i+1);    			
+    		}
     		String qualifiedPackagePathName = normalizeFolderPath(classPackageName.replace('.', '/'));
     		outputClassFileName = normalizedOutputDirectory + qualifiedPackagePathName + simpleClassName + ".java";
     	}
@@ -233,6 +253,9 @@ public class GeneratorLauncher {
 	 * @return the normalized path
 	 */
 	public static String normalizeFolderPath(String path) {
+		if (path == null || path.isEmpty()) {
+			return "";
+		}
 		String s = path.replaceAll("(/|\\\\)+", "/");
 		if (!s.endsWith("/")) {
 			s += "/";

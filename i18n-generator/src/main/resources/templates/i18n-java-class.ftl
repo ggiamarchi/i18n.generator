@@ -1,4 +1,4 @@
-package ${classPackageName};
+<#if classPackageName != "">package ${classPackageName};</#if>
 
 import java.util.Locale;
 

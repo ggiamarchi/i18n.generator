@@ -1,4 +1,4 @@
-package ${interfacePackageName};
+<#if interfacePackageName != "">package ${interfacePackageName};</#if>
 
 /**
  * Messages for resource bundle ${bundleName}
