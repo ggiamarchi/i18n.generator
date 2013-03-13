@@ -1,10 +1,10 @@
-package com.github.ggiamarchi.i18n.test;
+package com.github.ggiamarchi.i18n.generator.test;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import com.github.ggiamarchi.i18n.GeneratorLauncher;
-import com.github.ggiamarchi.i18n.GeneratorLauncher.Method;
+import com.github.ggiamarchi.i18n.generator.GeneratorLauncher;
+import com.github.ggiamarchi.i18n.generator.GeneratorLauncher.Method;
 
 public class LauncherTest {
 

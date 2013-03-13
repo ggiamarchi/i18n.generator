@@ -1,4 +1,4 @@
-package com.github.ggiamarchi.i18n.runtime;
+package com.github.ggiamarchi.i18n.generator.runtime;
 
 import java.text.MessageFormat;
 import java.util.Locale;

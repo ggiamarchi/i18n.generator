@@ -1,4 +1,4 @@
-package com.github.ggiamarchi.i18n;
+package com.github.ggiamarchi.i18n.generator;
 
 public class GeneratorException extends RuntimeException {
 

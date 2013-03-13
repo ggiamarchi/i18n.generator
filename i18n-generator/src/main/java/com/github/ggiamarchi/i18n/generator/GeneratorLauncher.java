@@ -1,4 +1,4 @@
-package com.github.ggiamarchi.i18n;
+package com.github.ggiamarchi.i18n.generator;
 
 import java.io.File;
 import java.io.FileInputStream;

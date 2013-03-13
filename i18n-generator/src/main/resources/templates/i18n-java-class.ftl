@@ -2,7 +2,7 @@
 
 import java.util.Locale;
 
-import com.github.ggiamarchi.i18n.runtime.I18NSupport;
+import com.github.ggiamarchi.i18n.generator.runtime.I18NSupport;
 
 <#if classPackageName != interfacePackageName>
 import ${interfacePackageName}.${interfaceName};
