@@ -7,7 +7,7 @@
 		<!-- 
 		<groupId>com.github.i18n.generator</groupId>
 		-->
-		<groupId>com.github.i18n-generator-maven-plugin</groupId>
+		<groupId>com.github.i18n.generator.maven.plugin</groupId>
 		<artifactId>i18n-generator-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
