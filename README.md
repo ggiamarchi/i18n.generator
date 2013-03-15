@@ -2,7 +2,7 @@
 
 <hr/>
 
-# I18N Generator Maven Plugin #
+# I18N Generator #
 
  * <a href="#abstract">Abstract</a>
  * <a href="#quickstart">Quickstart</a>
@@ -12,8 +12,8 @@
 
 ### Abstract ###
 
-This project provides a Maven plugin that generate Java class with methods that match i18n properties. Calling methods
-on the generated interface rather that reference string property keys in source code prevent never reference a
+This project provides code generator for Java that produces class with methods that match i18n properties. Calling
+methods on the generated interface rather that reference string property keys in source code prevents to reference a
 non-existing key.
 
 For instance, assume that we have two java property files. The fist one, `messages.properties`, provides english messages
