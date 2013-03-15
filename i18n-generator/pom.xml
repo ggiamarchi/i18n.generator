@@ -3,161 +3,23 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
-		<groupId>com.github.i18n.generator.maven.plugin</groupId>
-		<artifactId>i18n-generator-maven-plugin-parent</artifactId>
+		<groupId>com.github.i18n.generator</groupId>
+		<artifactId>i18n-generator-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<!--
-	<groupId>com.github.i18n.generator</groupId>
-	-->
-	<artifactId>i18n-generator-parent</artifactId>
-	<!--
-	<version>0.1-SNAPSHOT</version>
-	-->
-	<packaging>pom</packaging>
-
-	<name>I18N Generator Project</name>
-	<url>https://github.com/ggiamarchi/i18n.generator</url>
-	<description>Generate Java class with methods that match i18n properties</description>
-
-	<licenses>
-		<!-- TODO -->
-	</licenses>
-
-	<developers>
-		<developer>
-			<id>ggiamarchi</id>
-			<name>Guillaume Giamarchi</name>
-			<email>guillaume.giamarchi@gmail.com</email>
-		</developer>
-	</developers>
-
-	<issueManagement>
-		<system>GitHub</system>
-		<url>https://github.com/ggiamarchi/i18n.generator/issues</url>
-	</issueManagement>
-
-	<scm>
-		<url>https://github.com/ggiamarchi/i18n.generator</url>
-		<connection>scm:git:git://github.com/ggiamarchi/i18n.generator.git</connection>
-		<developerConnection>scm:git:git@github.com:ggiamarchi/i18n.generator.git</developerConnection>
-	</scm>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus snapshot repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>Sonatype Nexus release repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
+	<artifactId>i18n-generator</artifactId>
+	<packaging>jar</packaging>
+	<name>I18N Generator</name>
+	<description>Generator responsible of the actual code generation based on a template engine</description>
+	
 	<dependencies>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.19</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<mavenExecutorId>forked-path</mavenExecutorId>
-					<arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<profiles>
-		<profile>
-			<id>release-sign-artifacts</id>
-			<activation>
-				<property>
-					<name>performRelease</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.4</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
-	<modules>
-		<module>i18n-runtime</module>
-		<module>i18n-generator</module>
-	</modules>
 
 </project>
