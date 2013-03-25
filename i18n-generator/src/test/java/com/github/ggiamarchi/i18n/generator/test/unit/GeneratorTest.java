@@ -1,4 +1,4 @@
-package com.github.ggiamarchi.i18n.generator.test;
+package com.github.ggiamarchi.i18n.generator.test.unit;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.github.ggiamarchi.i18n.generator.Generator;
-import com.github.ggiamarchi.i18n.generator.GeneratorLauncher.Method;
+import com.github.ggiamarchi.i18n.generator.Method;
 
 public class GeneratorTest {
 

@@ -1,4 +1,4 @@
-package com.github.ggiamarchi.i18n.generator.test;
+package com.github.ggiamarchi.i18n.generator.test.unit;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

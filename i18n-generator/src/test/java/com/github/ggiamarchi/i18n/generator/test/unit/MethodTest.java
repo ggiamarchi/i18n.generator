@@ -1,25 +1,18 @@
-package com.github.ggiamarchi.i18n.generator.test;
+package com.github.ggiamarchi.i18n.generator.test.unit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
-import com.github.ggiamarchi.i18n.generator.GeneratorLauncher;
-import com.github.ggiamarchi.i18n.generator.GeneratorLauncher.Method;
+import com.github.ggiamarchi.i18n.generator.Method;
 
-public class LauncherTest {
+public class MethodTest {
 
-	@Test
-	public void normalizeFolderPathTest() {
-		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("/path/to/directory"));
-		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("/path/to/directory/"));
-		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("///path/to//directory"));
-		assertEquals("/path/to/directory/", GeneratorLauncher.normalizeFolderPath("/path///to/directory//"));
-		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:\\path\\to\\directory"));
-		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:\\path\\to\\directory\\"));
-		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:\\\\path\\/\\to\\//directory/\\"));
-		assertEquals("C:/path/to/directory/", GeneratorLauncher.normalizeFolderPath("C:/\\path\\/to\\directory"));
-	}
-	
 	@Test
 	public void methodInnerClassTestOk() {
 
@@ -101,5 +94,5 @@ public class LauncherTest {
 		assertEquals(new Method("a", "b", "c", "d").hashCode(), new Method("a", "b", "c", "d").hashCode());
 		assertNotEquals(new Method("a", "b").hashCode(), new Method("a", "b", "c").hashCode());		
 	}
-	
+
 }

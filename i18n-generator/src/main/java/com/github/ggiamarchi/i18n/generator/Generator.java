@@ -20,7 +20,7 @@ public class Generator {
 		 * Init freemarker generation engine
 		 */
 		cfg = new Configuration();
-		cfg.setClassForTemplateLoading(GeneratorLauncher.class, "/templates");
+		cfg.setClassForTemplateLoading(GeneratorLauncher.class, "/com/github/ggiamarchi/i18n/generator/templates");
 		cfg.setObjectWrapper(new DefaultObjectWrapper());
 	}
 

@@ -20,6 +20,12 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.19</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.i18n.generator</groupId>
+			<artifactId>i18n-runtime</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 </project>
