@@ -62,16 +62,12 @@ public class Main {
 			}
 
 			if ("-dir".equals(arg) || "-d".equals(arg)) {
-				File dirFile = new File(args[++i]);
-				dirFile.getParentFile().mkdirs();				
-				dir = dirFile.getAbsolutePath();
+				dir = args[++i];
 				continue;
 			}
 
-			if ("-output".equals(arg) || "-o".equals(arg)) {
-				File dirFile = new File(args[++i]);
-				dirFile.getParentFile().mkdirs();				
-				output = dirFile.getAbsolutePath();
+			if ("-output".equals(arg) || "-o".equals(arg)) {			
+				output = args[++i];
 				continue;
 			}
 
@@ -90,8 +86,19 @@ public class Main {
 				continue;
 			}
 
+			throw new IllegalArgumentException("Unknown option '" + arg + "'");
+			
 		}
 
+	}
+	
+	private static String createParentDir(String directory) {
+		File dir = new File(directory);
+		if (!dir.isDirectory()) {
+			throw new IllegalArgumentException("'" + directory + "' does not exists or is not a directory");
+		}
+		dir.getParentFile().mkdirs();
+		return dir.getAbsolutePath();
 	}
 	
 	public static void main(String[] args) {
@@ -99,6 +106,9 @@ public class Main {
 		Main main = new Main();
 		
 		main.getArgs(args);
+		
+		main.dir = createParentDir(main.dir);
+		main.output = createParentDir(main.output);
 
 		GeneratorLauncher generator = new GeneratorLauncher();
 

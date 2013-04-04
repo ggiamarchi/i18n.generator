@@ -21,6 +21,7 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.github.ggiamarchi.i18n.generator.Main;
@@ -30,6 +31,11 @@ public class MainTest {
 	private static final String OUTPUT_DIR = "target/generated-test-integ";
 	private static final String SOURCE_TEST_DIR = "src/test-rc";
 
+	@BeforeClass
+	public static void init() {
+		new File(OUTPUT_DIR).mkdirs();
+	}
+	
 	@Test
 	public void testMain() throws Exception {
 
