@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>I18 Generator Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" >
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.html">I18N Generator</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right">
+
+              <li>
+                <a href="index.html"><i class="icon-home"></i>&nbsp;Home</a>
+              </li>
+              
+              <li id="menubar-item-project">
+                <a href="#abstract"><i class="icon-briefcase"></i>&nbsp;Project</a>
+              </li>
+
+              <li  id="menubar-item-doc">
+                <a href="#cmdlinetool"><i class="icon-pencil"></i>&nbsp;Documentation</a>
+              </li>
+
+              <li id="menubar-item-downloads">
+                <a href="#downloads"><i class="icon-arrow-down"></i>&nbsp;Downloads</a>
+              </li>
+              
+              <li id="menubar-item-contact">
+                <a href="#contact"><i class="icon-user"></i>&nbsp;Contact</a>
+              </li>
+              
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="span2">
+          <ul class="nav nav-list">
+
+            <li class="nav-header"><a href="index.html">Home</a></li>
+
+            <li class="nav-header">Project</li>
+
+            <li id="menu-item-abstract" class="ref-menubar-project"><a href="#abstract">Abstract</a></li>
+            <li id="menu-item-quickstart" class="ref-menubar-project"><a href="#quickstart">Quickstart</a></li>
+            <li id="menu-item-sourcecode" class="ref-menubar-project"><a href="#sourcecode">Source code</a></li>
+            <li id="menu-item-issuetracker" class="ref-menubar-project"><a href="#issuetracker">Issue Tracker</a></li>
+            <li id="menu-item-license" class="ref-menubar-project"><a href="#license">License</a></li>
+
+            <li class="nav-header">Documentation</li>
+
+            <li id="menu-item-cmdlinetool" class="ref-menubar-doc"><a href="#cmdlinetool">Command line tool</a></li>
+            <li id="menu-item-javalib" class="ref-menubar-doc"><a href="#javalib">Using as Java library</a></li>
+            <li id="menu-item-ant" class="ref-menubar-doc"><a href="#ant">Ant Integration</a></li>
+            <li id="menu-item-maven" class="ref-menubar-doc"><a href="#maven">Maven Plugin</a></li>
+
+            <li id="menu-item-downloads" class="nav-header ref-menubar-downloads"><a href="#downloads">Downloads</a></li>
+
+            <li id="menu-item-contact" class="nav-header ref-menubar-contact"><a href="#contact">Contact</a></li>
+
+          </ul>
+        </div>
+        <div class="span10">
+
+
+          <div class="content" id="content-abstract">
+
+            <h1>Abstract</h1>
+
+            <p>This project provides code generator for Java that produces class with methods that match i18n properties. Calling
+            methods on the generated interface rather that reference string property keys in source code prevents to reference a
+            non-existing key.</p>
+
+            <p>For instance, assume that we have two java property files. The fist one, <code>messages.properties</code>, provides english messages
+            (the default language in this case) for an application</p>
+
+            <pre class="brush: java">
+            hello.world=Hello everybody
+            hello.to.somebody=Hello {0} {1}
+            </pre>
+
+            <p>And the second one, <code>messages_fr_FR.properties</code>, provides the same messages in french</p>
+
+            <pre class="brush: java">
+            hello.world=Bonjour tout le monde
+            hello.to.somebody=Bonjour {0} {1}
+            </pre>
+
+            <p>The purpose of the plugin is to generate a java interface (and its implementation, as we'll see later) with methods
+            that match properties defined in <code>*.properties</code> files. The generated interface looks something like this one</p>
+
+            <pre class="brush: java">
+            public interface Messages {
+
+              String hello_world();
+
+              String hello_to_somebody(String arg0, String arg1);
+
+            }
+            </pre>
+
+            <p>An implementation class for this interface is generated as well. The goal of this implementation is to return the value
+            corresponding to the right language for each interface's method. "The right language" means the one according to either
+            the defaut locale or the one given by  a LocaleProvider, an interface that can be implemented to compute the locale on
+            the fly at runtime. For example, you would like to get the locale from the user session in case of a web application.</p>
+
+            <pre class="brush: java">
+            public class MessagesImpl implements Messages {
+
+              @Override
+              public String hello_world() {
+                // ...
+              }
+
+              @Override
+              public String hello_to_somebody(String arg0, String arg1) {
+                // ...
+              }
+
+              // Some technical stuffs...
+
+            }
+            </pre>
+
+            <p>Then, you finally just have to use these generated class in you application like any another. For example,</p>
+
+            <pre class="brush: java">
+            Messages messages = ... // Instanciate the MessagesImpl class the way you want. With the new keywork, a Spring lookup, ...
+            String helloMe = messages.hello_to_somebody("Guillaume", "Giamarchi");
+            </pre>
+
+          </div>
+
+
+          <div class="content" id="content-quickstart">
+            <h1>Quickstart</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+
+          <div class="content" id="content-sourcecode">
+            <h1>Source Code</h1>
+            <p>This project is hosted on github.</p>
+
+            <pre class="brush: plain">
+            Project URL => https://github.com/ggiamarchi/i18n.generator
+            </pre>
+
+            <p>To get the source code, just clone the git repository</p>
+
+            <pre class="brush: plain">
+            git clone https://github.com/ggiamarchi/i18n.generator.git
+            </pre>
+
+          </div>
+
+          <div class="content" id="content-issuetracker">
+            <h1>Issue Tracker</h1>
+            <p>This project is hosted on github.</p>
+
+            <pre class="brush: plain">
+            Project URL => https://github.com/ggiamarchi/i18n.generator
+            </pre>
+
+            <p>To submit issues use the github bug tracker</p>
+
+            <pre class="brush: plain">
+            https://github.com/ggiamarchi/i18n.generator/issues
+            </pre>
+          </div>
+
+          <div class="content" id="content-license">
+            <h1>License</h1>
+            <p>All material on this website is licensed under the Apache License, Version 2.0</p>
+            <pre class="brush: plain">
+              Copyright 2013 Guillaume Giamarchi
+
+              Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+              you may not use this file except in compliance with the License.
+              You may obtain a copy of the License at
+
+                  http://www.apache.org/licenses/LICENSE-2.0
+
+              Unless required by applicable law or agreed to in writing, software
+              distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+              See the License for the specific language governing permissions and
+              limitations under the License.
+            </pre>
+          </div>
+
+          <div class="content" id="content-cmdlinetool">
+            <h1>Command Line Tool</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+
+          <div class="content" id="content-javalib">
+            <h1>Java Library</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+
+          <div class="content" id="content-ant">
+            <h1>Ant Integration</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+
+          <div class="content" id="content-maven">
+            <h1>Maven Plugin</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+
+          <div class="content" id="content-downloads">
+            <h1>Downloads</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+
+          <div class="content" id="content-contact">
+            <h1>Contact</h1>
+            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/shCore.js"></script>
+    <script src="js/shBrushJava.js"></script>
+    <script src="js/shBrushPlain.js"></script>
+
+    <script type="text/javascript">
+      
+      function showPage() {
+        hashId = window.location.hash.substring(1, window.location.hash.length);        
+        $('#content-' + hashId).css('display', 'block');
+        $('#menu-item-' + hashId).addClass('active');
+
+        var classList = $('#menu-item-' + hashId).attr('class').split(/\s+/);
+        $.each( classList, function(index, item){
+            if (item.indexOf("ref-menubar-") == 0) {
+              $('#menubar-item-' + item.substring(12)).addClass('active');
+            }
+        });
+      }
+
+      $(window).on('hashchange', function() {
+        $('.content').css('display', 'none');
+        $('li').removeClass('active');
+        showPage();
+      });
+
+      SyntaxHighlighter.defaults['gutter'] = false;
+      SyntaxHighlighter.all();
+
+      if (window.location.hash == '') {
+        window.location.hash = 'abstract';
+      }
+      showPage();
+
+    </script>
+
+  </body>
+</html>
