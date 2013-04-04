@@ -1,4 +1,4 @@
-i18n-generator-maven-plugin
-===========================
+I18N Generator Web site
+=======================
 
-Maven plugin to generate Java class with methods that match i18n properties
+http://ggiamarchi.github.com/i18n.generator/
