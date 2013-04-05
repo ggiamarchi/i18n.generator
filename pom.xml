@@ -152,6 +152,7 @@
 	<modules>
 		<module>i18n-runtime</module>
 		<module>i18n-generator</module>
+		<module>i18n-ant</module>
 	</modules>
 
 </project>
