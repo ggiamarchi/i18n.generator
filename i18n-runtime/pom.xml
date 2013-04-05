@@ -12,6 +12,6 @@
 	<artifactId>i18n-runtime</artifactId>
 	<packaging>jar</packaging>
 	<name>I18N Runtime Library</name>
-	<description>Dependency that must be added to any project that use the i18n-generator-maven-plugin</description>
+	<description>Dependency that must be added to any project that use generated code from I18N Generator</description>
 
 </project>
