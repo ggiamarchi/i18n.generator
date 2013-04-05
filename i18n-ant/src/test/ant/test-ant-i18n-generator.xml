@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<project default="main" basedir="../../..">
+
+	<taskdef file="src/main/resources/com/github/ggiamarchi/i18n/generator/ant/i18nGenerator.properties" />
+	
+	<target name="main" >
+		<i18n-generator
+			bundle="com.github.ggiamarchi.i18n.generator.test.messages"
+			dir="src/test/resources"
+			output="target/generated-test-ant"
+		/>
+	</target>
+  
+</project>
