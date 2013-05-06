@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.i18n.generator</groupId>
+	<groupId>com.github.ggiamarchi.i18n.generator</groupId>
 	<artifactId>i18n-generator-parent</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -150,9 +150,11 @@
 	</profiles>
 
 	<modules>
-		<module>i18n-runtime</module>
+		<module>i18n-generator-runtime</module>
 		<module>i18n-generator</module>
-		<module>i18n-ant</module>
+		<module>i18n-generator-ant</module>
+		<module>i18n-generator-maven-plugin</module>
+		<module>i18n-generator-maven-plugin-tests</module>
 	</modules>
 
 </project>

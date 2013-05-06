@@ -4,14 +4,14 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.i18n.generator</groupId>
+		<groupId>com.github.ggiamarchi.i18n.generator</groupId>
 		<artifactId>i18n-generator-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>i18n-runtime</artifactId>
+	<artifactId>i18n-generator-runtime</artifactId>
 	<packaging>jar</packaging>
-	<name>I18N Runtime Library</name>
+	<name>I18N Generator Runtime Library</name>
 	<description>Dependency that must be added to any project that use generated code from I18N Generator</description>
 
 </project>

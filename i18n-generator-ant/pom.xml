@@ -4,19 +4,19 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.i18n.generator</groupId>
+		<groupId>com.github.ggiamarchi.i18n.generator</groupId>
 		<artifactId>i18n-generator-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>i18n-ant</artifactId>
+	<artifactId>i18n-generator-ant</artifactId>
 	<packaging>jar</packaging>
-	<name>I18N Ant Task</name>
+	<name>I18N Generator Ant Task</name>
 	<description>Ant task for I18N Genrator</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.github.i18n.generator</groupId>
+			<groupId>com.github.ggiamarchi.i18n.generator</groupId>
 			<artifactId>i18n-generator</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>

@@ -9,23 +9,25 @@
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>i18n-generator</artifactId>
-	<packaging>jar</packaging>
-	<name>I18N Generator Core</name>
-	<description>Generator responsible of the actual code generation based on a template engine</description>
-	
+	<artifactId>i18n-generator-maven-plugin-tests</artifactId>
+	<packaging>pom</packaging>
+	<name>I18N Generator Maven Plugin Tests</name>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<version>2.3.19</version>
-		</dependency>
 		<dependency>
 			<groupId>com.github.ggiamarchi.i18n.generator</groupId>
 			<artifactId>i18n-generator-runtime</artifactId>
 			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
+	<modules>
+		<module>i18n-generator-maven-plugin-test-001</module>
+		<module>i18n-generator-maven-plugin-test-002</module>
+		<module>i18n-generator-maven-plugin-test-003</module>
+		<module>i18n-generator-maven-plugin-test-004</module>
+		<module>i18n-generator-maven-plugin-test-005</module>
+		<module>i18n-generator-maven-plugin-test-006</module>
+	</modules>
+	
 </project>
