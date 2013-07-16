@@ -415,7 +415,109 @@
 
           <div class="content" id="content-ant">
             <h1>Ant Integration</h1>
-            <p style="text-align: center;  font-size: 30px; margin-top:50px"><img src="img/underconstruction.png" /><br/><br/>Comming soon...</p>
+            
+            <p>i18n Generator can be run with Ant. To do so, you need add the two following jar in you Ant classpath.</p>
+            
+            <pre class="brush: plain">
+           	i18n-generator.jar
+           	i18n-generator-ant.jar
+            </pre>
+            
+            <p>Then you have to use the provided ant task <code>i18n-generator</code>. To be able to use this task you need to import the
+            corresponding task definition in your Ant project.</p>
+			
+			<pre class="brush: xml">
+			&lt;taskdef resource="com/github/ggiamarchi/i18n/generator/ant/i18nGenerator.properties" /&gt;
+            </pre>
+            
+            <h2>&lt;i18n-generator/&gt; task parameters</h2>
+            
+            <table>
+           		<tr>
+           			<th>Name</th>
+           			<th>Mandatory</th>
+           			<th>Default</th>
+           			<th width="50%">Description</th>
+           		</tr>
+            	<tr>
+           			<td>bundle</td>
+           			<td class="center">Yes</td>
+           			<td class="center">(none)</td>
+           			<td>
+           				The qualifed bundle name. For instance if your i18n properties files are <code>messages.properties</code> and
+           				<code>messages_en.properties</code> in a package called <code>com.myproject.i18n</code>, the qualified bundle name will be
+           				<code>com.myproject.i18n.messages</code>.
+           			</td>
+            	</tr>
+            	<tr>
+           			<td>dir</td>
+           			<td class="center">Yes</td>
+           			<td class="center">(none)</td>
+           			<td>
+           				The directory where to look for the bundle. With the previous example, the directory containing
+           				<code>com/myproject/i18n/messages.properties</code>. If the path is relative, it will be
+           				relative to the ant project's basedir. 
+           			</td>
+            	</tr>
+            	<tr>
+           			<td>output</td>
+           			<td class="center">Yes</td>
+           			<td class="center">(none)</td>
+           			<td>
+           				The directory where the code will be generated. If the path is relative, it will be
+           				relative to the ant project's basedir.
+           			</td>
+            	</tr>
+            	<tr>
+           			<td>interfaceName</td>
+           			<td class="center">No</td>
+           			<td class="center">(calculated from bundle name)</td>
+           			<td>
+           				The qualified name of the interface to generate. If not provided, the interface will be generated in the same
+           				package as the bundle file with the same name (first letter in uppercase).
+           			</td>
+            	</tr>
+            	<tr>
+           			<td>className</td>
+           			<td class="center">No</td>
+           			<td class="center">(calculated from bundle name)</td>
+           			<td>
+           				The qualified name of the implementation class to generate. If not provided, the class will be generated in the same
+           				package as the bundle file with the same name (first letter in uppercase) and the suffix "Impl".
+           			</td>
+            	</tr>
+            </table>
+            
+            <h2>Example</h2>
+            <p>The listing below shows you a sample ant build using <code>i18n-generator</code> task.</p>
+			<pre class="brush: xml">
+			&lt;?xml version="1.0"?&gt;
+			
+			&lt;project default="i18-generator-test" basedir="."&gt;
+			
+				&lt;taskdef resource="com/github/ggiamarchi/i18n/generator/ant/i18nGenerator.properties"/&gt;
+				
+				&lt;target name="i18-generator-test" &gt;
+
+					&lt;i18n-generator 
+						bundle="com.github.ggiamarchi.i18n.generator.test.messages"
+						dir="src/test/resources"
+						output="target/test/out"
+					/&gt;
+		
+					&lt;i18n-generator 
+						bundle="com.github.ggiamarchi.i18n.generator.test.messages"
+						dir="src/test/resources"
+						output="target/test/out"
+						interfaceName="com.github.ggiamarchi.i18n.generator.test.iface.Mess"
+						className="com.github.ggiamarchi.i18n.generator.test.impl.MessImpl"
+					/&gt;
+			
+				&lt;/target&gt;
+			  
+			&lt;/project&gt;
+            </pre>           
+            
           </div>
 
           <div class="content" id="content-maven">
@@ -443,6 +545,7 @@
     <script src="js/shCore.js"></script>
     <script src="js/shBrushJava.js"></script>
     <script src="js/shBrushPlain.js"></script>
+	<script src="js/shBrushXml.js"></script>
 
     <script type="text/javascript">
       
