@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<project default="i18-generator-test" basedir="../../..">
+
+	<taskdef resource="com/github/ggiamarchi/i18n/generator/ant/i18nGenerator.properties"/>
+	
+	<target name="i18-generator-test" >
+		
+		<i18n-generator 
+			bundle="com.github.ggiamarchi.i18n.generator.test.messages"
+			dir="src/test/resources"
+			output="target/test/out"
+		/>
+		
+		<i18n-generator 
+			bundle="com.github.ggiamarchi.i18n.generator.test.messages"
+			dir="src/test/resources"
+			output="target/test/out"
+			interfaceName="com.github.ggiamarchi.i18n.generator.test.iface.Mess"
+			className="com.github.ggiamarchi.i18n.generator.test.impl.MessImpl"
+		/>
+
+	</target>
+  
+</project>
